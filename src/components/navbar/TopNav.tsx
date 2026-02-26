@@ -28,7 +28,7 @@ export default async function TopNav() {
         <GiMatchTip size={40}/>
         <div className='font-bold text-3xl flex'>
             <span className='text-gray-900'>CliiiQ</span>
-            <span className='text-gray-200'>Hub</span>
+            <span className='text-gray-200'>HuB</span>
         </div>
     </NavbarBrand>
      <NavbarContent justify='center'>

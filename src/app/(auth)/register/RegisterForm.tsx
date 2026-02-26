@@ -1,21 +1,30 @@
-'use client';
+'use client'
 import { registerUser } from '@/app/actions/authActions';
 import { registerSchema, RegisterSchema } from '@/lib/schemas/registerSchema';
-import { Button, Card, CardBody, CardHeader, Input } from '@heroui/react';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Button } from '@heroui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react'
-import { useForm } from 'react-hook-form';
 import { GiPadlock } from 'react-icons/gi';
+import { Input } from '@heroui/input';
+import { useForm } from 'react-hook-form';
+import { handleFormServerErrors } from '@/lib/util';
+
 
 export default function RegisterForm() {
-  const { register, handleSubmit, formState: { errors, isValid} } = useForm<RegisterSchema>({
+  const { register, handleSubmit, setError, formState: { errors, isValid, isSubmitting } } = useForm<RegisterSchema>({
         resolver: zodResolver(registerSchema),
-        mode: 'onTouched',
+        mode: 'onTouched'
     });
     
     const onSubmit = async (data: RegisterSchema) => {
         const result = await registerUser(data);
-        console.log(result);
+
+        if (result.status === 'success') {
+            console.log('User registered successfully')
+        } else {
+            handleFormServerErrors(result, setError)
+        }
     }
   return (
 
@@ -57,7 +66,15 @@ export default function RegisterForm() {
                         isInvalid={!!errors.password}
                         errorMessage={errors.password?.message}
                     />
-                    <Button isDisabled={!isValid} fullWidth color='secondary' type='submit'>
+                    {errors.root?.serverError && (
+                        <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
+                    )}
+                    <Button 
+                    isLoading={isSubmitting}
+                    isDisabled={!isValid} 
+                    fullWidth color='secondary' 
+                    type='submit'
+                    >
                         Register
                     </Button>
                 </div>

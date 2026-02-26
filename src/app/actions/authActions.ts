@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { ActionResult } from "@/types";
+import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 
@@ -40,10 +41,14 @@ export async function signOutUser() {
         await signOut({ redirectTo: '/' });
 }
 
-export async function registerUser(data: RegisterSchema) {
+export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>> {
+    try {
+        
     const validated = registerSchema.safeParse(data);
 
-    if (!validated.success) {return {error: validated.error.message};}
+    if (!validated.success) {
+        return {status:'error', error: validated.error.message};
+    }
 
     const { name, email, password } = validated.data;
 
@@ -53,16 +58,20 @@ export async function registerUser(data: RegisterSchema) {
         where: { email }
     });
 
-    if (existingUser) return {error: "User already exists"};
+    if (existingUser) return {status: 'error', error: "User already exists"};
 
-
-    return prisma.user.create({
+    const user = await prisma.user.create({
         data: {
             name,
             email,
             passwordHash: hashPassword
         }
     });
+    return{status: 'success', data: user}
+    } catch (error) {
+        console.log(error);
+        return {status: 'error', error: 'registration error'}
+    }
 }
 
 export async function getUserByEmail(email: string) {
