@@ -1,6 +1,7 @@
 'use client';
 
 import LikeButton from '@/components/likeButton';
+import PresenceDot from '@/components/PresenceDot';
 import { calculateAge, transformImageUrl } from '@/lib/util';
 import { Card, CardFooter, Image } from '@heroui/react'
 import { Member } from '@prisma/client'
@@ -36,6 +37,9 @@ export default function MemberCard({ member, likeIds }: Props) {
         <div onClick={preventLinkAction}>
             <div className='absolute top-3 right-3 z-50'>
                 <LikeButton targetId={member.userId} hasLiked={hasLiked} />
+            </div>
+            <div className='absolute top-2 left-3 z-50'>
+                <PresenceDot member={member} />
             </div>
         </div>
         <CardFooter className='flex justify-start overflow-hidden absolute bottom-0 bg-linear-to-t from-black to-transparent z-10'>

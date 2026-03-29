@@ -4,7 +4,8 @@ import { MessageDto } from '@/types';
 import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { Avatar } from '@heroui/avatar';
-import { transformImageUrl } from '@/lib/util';
+import { timeAgo, transformImageUrl } from '@/lib/util';
+import PresenceAvatar from '@/components/PresenceAvatar';
 
 type Props = {
     message: MessageDto;
@@ -20,11 +21,13 @@ export default function MessageBox({message, currentUserId}: Props) {
     }, [messageEndRef])
 
     const renderAvartar = () => (
-        <Avatar 
-            name={message.senderName}
-            className='self-end'
+        <div className='self-end'>
+            <PresenceAvatar 
+            userId={message.senderId}
             src={transformImageUrl(message.senderImage) || '/images/user.png'}
         />
+        </div>
+        
     )
 
     const messageContentClasses = clsx(
@@ -40,7 +43,7 @@ export default function MessageBox({message, currentUserId}: Props) {
             'justify-between': isCurrentUserSender
         })}>
             {message.dateRead && message.recipientId !== currentUserId ? (
-                <span className='text-sx text-black text-italic'>(Read X mins ago)</span>
+                <span className='text-sx text-black text-italic'>(Read {timeAgo(message.dateRead)})</span>
             ) : <div></div>}
             <div className='flex'>
                 <span className='text-sm font-semibold text-gray-900'>{message.senderName}</span>

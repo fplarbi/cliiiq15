@@ -1,4 +1,5 @@
 'use client';
+import PresenceDot from '@/components/PresenceDot';
 import { calculateAge, transformImageUrl } from '@/lib/util'
 import { Card, CardBody, CardFooter } from '@heroui/card'
 import { Button, Divider, Image } from '@heroui/react'
@@ -24,11 +25,17 @@ export default function MembersSidebar({member, navLinks}: Props) {
             alt='User profile main image'
             className='rounded-full mt-6 aspect-square object-cover'
         />
-        <CardBody>
+        <CardBody className='overflow-hidden'>
             <div className='flex flex-col items-center'>
-                <div className='text-2xl'>
+                <div className='flex'>
+                    <div className='text-2xl'>
                     {member.name}, {calculateAge(member.dateOfBirth)}
                 </div>
+                <div>
+                    <PresenceDot member={member} />
+                </div>
+                </div>
+                
                 <div>
                     {member.city}, {member.country}
                 </div>
