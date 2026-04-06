@@ -6,7 +6,7 @@ import MessageTable from './MessageTable';
 export default async function MessagesPage({searchParams}: 
   {searchParams: Promise<{container: string}>}) {
 const {container} = await searchParams;
-const messages = await getMessagesByContainer(container);
+const {messages, nextCursor} = await getMessagesByContainer(container);
 
 
   return (
@@ -15,7 +15,7 @@ const messages = await getMessagesByContainer(container);
         <MessageSidebar />
       </div>
       <div className='col-span-10'>
-          <MessageTable initialMessages={messages} />
+          <MessageTable initialMessages={messages} nextCursor={nextCursor} />
       </div>
     </div>
   )

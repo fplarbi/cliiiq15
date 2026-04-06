@@ -5,8 +5,7 @@ import { Channel } from "pusher-js"
 import { useCallback, useEffect, useRef } from "react";
 import useMessageStore from "./useMessageStore";
 import { useShallow } from "zustand/shallow";
-import { newMessageToast } from "@/components/navbar/NewMessageToast";
-import { data } from "framer-motion/client";
+import { newMessageToast } from "@/components/NotificationToast";
 import { newLikeToast } from "@/components/NotificationToast";
 
 export const useNotificationChannel = (userId: string | null) => {
