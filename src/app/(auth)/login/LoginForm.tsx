@@ -2,13 +2,17 @@
 
 import { signInUser } from '@/app/actions/authActions';
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
-import { Button, Card, CardBody, CardHeader, Input } from '@heroui/react'
+import { Button } from '@heroui/button'
+import { Card, CardBody, CardHeader,} from '@heroui/card'
+import { Input } from '@heroui/input'
+import { Link } from '@heroui/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { GiPadlock } from 'react-icons/gi'
 import { toast } from 'react-toastify';
+import SocialLogin from './SocialLogin';
 
 export default function LoginForm() {
     const router = useRouter();
@@ -63,6 +67,10 @@ export default function LoginForm() {
                             isDisabled={!isValid || isSubmitting} fullWidth color='secondary' type='submit'>
                             Login
                         </Button>
+                        <SocialLogin />
+                        <div className='flex justify-center hover:underline text-sm'>
+                            <Link href='/forgot-password'>Forgot password?</Link>
+                        </div>
                     </div>
                 </form>
             </CardBody> 

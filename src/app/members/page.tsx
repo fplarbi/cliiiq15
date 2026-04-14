@@ -7,8 +7,6 @@ import { fetchCurrentUserLikeIds } from '../actions/likeActions';
 import PaginationComponet from '@/components/PaginationComponet';
 import { GetMemberParams } from '@/types';
 import EmptyState from '@/components/EmptyState';
-import { s } from 'framer-motion/client';
-
 
 export default async function MembersPage({searchParams}: {searchParams: GetMemberParams}) {
 

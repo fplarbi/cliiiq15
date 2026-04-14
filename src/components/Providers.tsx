@@ -3,8 +3,7 @@ import { getUnreadMessageCount } from '@/app/actions/messageActions';
 import useMessageStore from '@/hooks/useMessageStore';
 import { useNotificationChannel } from '@/hooks/useNofiticationChannel';
 import { usePresenceChannel } from '@/hooks/usePresenceChannel';
-import { HeroUIProvider, useCalendar } from '@heroui/react'
-import { count } from 'console';
+import { HeroUIProvider } from '@heroui/react'
 import React, { useCallback, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +23,7 @@ useEffect(() => {
   }
 },[setUnreadCount, userId])
 
-  usePresenceChannel();
+  usePresenceChannel(userId);
   useNotificationChannel(userId);
   return (
    <HeroUIProvider>
