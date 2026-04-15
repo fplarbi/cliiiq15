@@ -6,7 +6,7 @@ import { pusherClient } from "@/lib/pusher";
 import { useShallow } from 'zustand/shallow'
 import { updateLastActive } from "@/app/actions/memberActions";
 
-export const usePresenceChannel = (userId: string | null) => {
+export const usePresenceChannel = (userId: string | null, profileComplete: boolean) => {
     const {set, add, remove} = usePresenceStore(
         useShallow(
         state => ({
@@ -30,7 +30,7 @@ export const usePresenceChannel = (userId: string | null) => {
     }, [remove]);
 
     useEffect(() => {
-        if (!userId) return;
+        if (!userId || !profileComplete) return;
         if (!channelRef.current) {
             channelRef.current = pusherClient.subscribe('presence-nm');
 
@@ -55,6 +55,6 @@ export const usePresenceChannel = (userId: string | null) => {
 
         }
 
-    }, [handleAddMember, handleRemoveMember, handleSetMembers, userId])
+    }, [handleAddMember, handleRemoveMember, handleSetMembers, userId, profileComplete])
 }
 
