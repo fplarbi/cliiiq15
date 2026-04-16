@@ -4,32 +4,35 @@ import useMessageStore from '@/hooks/useMessageStore';
 import { useNotificationChannel } from '@/hooks/useNofiticationChannel';
 import { usePresenceChannel } from '@/hooks/usePresenceChannel';
 import { HeroUIProvider } from '@heroui/react'
+import { SessionProvider } from 'next-auth/react';
 import React, { useCallback, useEffect } from 'react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function Providers({ children, userId, profileComplete }: 
+export default function Providers({ children, userId, profileComplete }:
   { children: React.ReactNode, userId: string | null, profileComplete: boolean }) {
-const updateUnreadCount = useMessageStore(state => state.updateUnreadCount);
+  const updateUnreadCount = useMessageStore(state => state.updateUnreadCount);
 
-const setUnreadCount = useCallback((amount: number) =>{
-  updateUnreadCount(amount);
-}, [updateUnreadCount])
+  const setUnreadCount = useCallback((amount: number) => {
+    updateUnreadCount(amount);
+  }, [updateUnreadCount])
 
-useEffect(() => {
-  if (userId) {
-  getUnreadMessageCount().then(count => {
-    setUnreadCount(count)
-  })
-  }
-},[setUnreadCount, userId])
+  useEffect(() => {
+    if (userId) {
+      getUnreadMessageCount().then(count => {
+        setUnreadCount(count)
+      })
+    }
+  }, [setUnreadCount, userId])
 
   usePresenceChannel(userId, profileComplete);
   useNotificationChannel(userId, profileComplete);
   return (
-   <HeroUIProvider>
-    <ToastContainer position='bottom-right' hideProgressBar className='z-50'/>
+    <SessionProvider>
+      <HeroUIProvider>
+        <ToastContainer position='bottom-right' hideProgressBar className='z-50' />
         {children}
-   </HeroUIProvider>
+      </HeroUIProvider>
+    </SessionProvider>
   )
 }

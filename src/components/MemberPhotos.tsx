@@ -8,6 +8,7 @@ import { fa } from 'zod/locales';
 import DeleteButton from './DeleteButton';
 import MemberImage from './MemberImage';
 import StarButton from './StarButton';
+import { toast } from 'react-toastify';
 
 type Props = {
     photos: Photo[] | null;
@@ -26,9 +27,15 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
     const onSetMain = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
         setLooading({ isLoading: true, id: photo.id, type: 'main' });
-        await setMainImage(photo);
-        router.refresh();
-        setLooading({ isLoading: false, id: '', type: '' })
+        try {
+            await setMainImage(photo);
+            router.refresh();
+        } catch (error: unknown) {
+            if (error instanceof Error) toast.error(error.message);
+            else toast.error("An error occurred while setting main image.");
+            setLooading({ isLoading: false, id: '', type: '' })
+        }
+
     }
 
     const onDelete = async (photo: Photo) => {
@@ -47,22 +54,22 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
                     {editing && (
                         <>
                             <div onClick={() => onSetMain(photo)} className='absolute top-3 left-3  z-50'>
-                                <StarButton 
-                                    selected={photo.url === mainImageUrl} 
+                                <StarButton
+                                    selected={photo.url === mainImageUrl}
                                     loading={
                                         loading.isLoading
                                         && loading.type === 'main'
                                         && loading.id === photo.id
-                                    } 
+                                    }
                                 />
                             </div>
                             <div onClick={() => onDelete(photo)} className='absolute top-3 right-3  z-50'>
-                                <DeleteButton 
-                                  loading={
+                                <DeleteButton
+                                    loading={
                                         loading.isLoading
                                         && loading.type === 'delete'
                                         && loading.id === photo.id
-                                    } 
+                                    }
                                 />
                             </div>
                         </>

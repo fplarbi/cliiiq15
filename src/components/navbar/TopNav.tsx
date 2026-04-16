@@ -11,6 +11,22 @@ import FiltersWrapper from './FiltersWrapper'
 
 export default async function TopNav() {
     const session = await auth();
+
+    const memberLinks = [
+        { href: '/members', label: 'Matches' },
+        { href: '/lists', label: 'Lists' },
+        { href: '/messages', label: 'Messages' }
+    ]
+
+    const adminLinks = [
+        { href: '/admin/dashboard', label: 'Dashboard' },
+        { href: '/admin/moderation', label: 'Moderation' },
+        { href: '/admin/users', label: 'Users' },
+        { href: '/admin/settings', label: 'Settings' }
+    ]
+
+    const Links = session?.user.role === 'ADMIN' ? adminLinks : memberLinks;
+
     return (
         <>
             <Navbar
@@ -34,9 +50,9 @@ export default async function TopNav() {
                     </div>
                 </NavbarBrand>
                 <NavbarContent justify='center'>
-                    <NavLink href='/members' label='Matches' />
-                    <NavLink href='/lists' label='Lists' />
-                    <NavLink href='/messages' label='Messages' />
+                    {Links.map(item => (
+                        <NavLink key={item.href} href={item.href} label={item.label} />
+                    ))}
                 </NavbarContent>
                 <NavbarContent justify='end'>
                     {session?.user ? (
